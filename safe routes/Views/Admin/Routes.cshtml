@@ -1,0 +1,51 @@
+﻿@using safe_routes.data
+@model IEnumerable<Route>
+@{
+    ViewData["Title"] = "Routes";
+}
+
+<h1>Routes</h1>
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped border">
+        <thead>
+            <tr class="table-secondary">
+                <th><label asp-for="@Model.FirstOrDefault().flightNumber"></label></th>
+                <th><label>airport departure</label></th>
+                <th><label>country name departure</label></th>
+                <th><label>timezone departure</label></th>
+                <th><label asp-for="@Model.FirstOrDefault().timeArrival"></label></th>
+                <th><label>airrport arrival</label></th>
+                <th><label>country name arrival</label></th>
+                <th><label>timezone arrival</label></th>
+                <th><label asp-for="@Model.FirstOrDefault().timeDeparture"></label></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var route in Model)
+            {
+            <tr>
+                <td>@route.flightNumber </td>
+                <td>@route.airportDeparture.airportName</td>
+                <td>@route.airportDeparture.countryName</td>
+                <td>@route.airportDeparture.timezone</td>
+                <td>@route.timeDeparture</td>
+                <td>@route.airportArrival.airportName</td>
+                <td>@route.airportArrival.countryName</td>
+                <td>@route.airportArrival.timezone</td>
+
+                <td>@route.timeArrival</td>
+
+
+
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No routes avaliable</p>
+}
+

@@ -1,0 +1,47 @@
+﻿@using safe_routes.data
+@model IEnumerable<Country>
+@{
+    ViewData["Title"] = "Countries";
+}
+
+<h1>Countries</h1>
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped border">
+        <thead>
+            <tr class="table-secondary">
+                <th><label asp-for="@Model.FirstOrDefault().countryName"></label></th>
+                <th><label asp-for="@Model.FirstOrDefault().continent"></label></th>
+                <th><label asp-for="@Model.FirstOrDefault().cases"></label></th>
+                <th><label asp-for="@Model.FirstOrDefault().todayCases"></label></th>
+                <th><label asp-for="@Model.FirstOrDefault().tests"></label></th>
+                <th><label asp-for="@Model.FirstOrDefault().population"></label></th>
+                <th><label asp-for="@Model.FirstOrDefault().active"></label></th>
+                <th><label asp-for="@Model.FirstOrDefault().deaths"></label></th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var country in Model)
+            {
+                <tr>
+                    <td>@country.countryName</td>
+                    <td>@country.continent</td>
+                    <td>@country.cases</td>
+                    <td>@country.todayCases</td>
+                    <td>@country.tests</td>
+                    <td>@country.population</td>
+                    <td>@country.active</td>
+                    <td>@country.deaths</td>
+                    
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No countries avaliable</p>
+}

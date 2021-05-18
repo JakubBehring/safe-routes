@@ -1,0 +1,56 @@
+﻿@using safe_routes.ViewModels.Home
+@model RouteDateViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+
+    <div class="container">
+        <form method="post">
+
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                        <label>ariport departure</label>
+                        <input  class="form-control" asp-for="@Model.airportDeparture" list="airportsArrival">
+                        <datalist id="airportsDeparture">
+                            @foreach (var airport in Model.airports)
+                            {
+                                <option>@airport.cityAndAirportName</option>
+                            }
+                        </datalist>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                        <label>ariport arrival</label>
+                        <input class="form-control" asp-for="@Model.airportArrival" list="airportsDeparture">
+                        <datalist id="airportArrival">
+                            @foreach (var airport in Model.airports)
+                            {
+                                <option>@airport.cityAndAirportName</option>
+                            }
+                        </datalist>
+                    </div>
+
+
+
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                        <label>Date</label>
+                        <input  class="form-control" type="datetime-local"  value="@DateTime.Now" asp-for="@Model.DateTimeArrival">
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                        <label>Max number of changes (max 3)</label>
+                        <input class="form-control" type="number" min="0" max="3"  asp-for="@Model.maxNumberOfChanges" value="3" list="maxNumberOfChanges">
+                        
+                    </div>
+
+
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                        <button type="submit" asp-action="PathFound">search </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

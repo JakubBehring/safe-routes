@@ -1,0 +1,138 @@
+﻿@using safe_routes.Models.PathFinder;
+@model PathInfo
+@{
+    ViewData["Title"] = "Path";
+}
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script src='//unpkg.com/leaflet-arc/bin/leaflet-arc.min.js'></script>
+</head>
+
+<div class="row">
+
+
+    <div>
+        <h1>sprawdziłem @Model.airportsCount lotnisk</h1>
+        <br />
+        <h1>sprawdziłem @Model.routesCount lotow: </h1>
+    </div>
+    <div class="col-md-10">
+        <div id="mapid" style="height:800px;">
+
+            <script type="text/javascript">
+                var mymap = L.map('mapid').setView([51.505, -0.09], 2);
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamFrdWJiZWhyaW5nIiwiYSI6ImNrb2dmMnR2bDB2ZzEyb3IwOW84c3VoaG4ifQ.iZFbkeKqe0Fdd0beyzdfAg', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'your.mapbox.access.token'
+                }).addTo(mymap);
+
+
+                function addMarker(latitude, longitude, index, map) {
+                    var marker = L.marker([latitude, longitude]).bindTooltip(index.toString(),
+                        {
+                            permanent: true,
+                            direction: 'right'
+                        }).addTo(map);
+                }
+                function addpolyline(latitudeStart, longitudeStart, latitudeEnd, longitudeEnd, map) {
+                    var pointA = new L.LatLng(latitudeStart, longitudeStart);
+                    var pointB = new L.LatLng(latitudeEnd, longitudeEnd);
+                    var pointList = [pointA, pointB];
+
+                    var firstpolyline = new L.Polyline(pointList, {
+                        color: 'red',
+                        weight: 3,
+                        opacity: 0.5,
+                        smoothFactor: 1
+                    });
+                      firstpolyline.addTo(map);
+                    L.Polyline.Arc([latitudeStart, longitudeStart], [latitudeEnd, longitudeEnd], {
+                        color: 'blue',
+                        vertices: 200
+                    }).addTo(map);
+                  //  L.addpolyline.arc(pointA, pointB)
+                }
+
+                @for (int i =1; i <= Model.airportsPath.Count; i++)
+                {
+                    var airport = Model.airportsPath[i-1];
+                    @:latitude = @airport.latiude;
+                    @:longitude = @airport.longitude;
+                    @:index = @i;
+                    @:addMarker(latitude, longitude, index, mymap);
+
+                    if(i+1 <= Model.airportsPath.Count)
+                {
+                        var nextAirport = Model.airportsPath[i];
+                          @:latitudeNext = @nextAirport.latiude;
+                    @:longitudeNext = @nextAirport.longitude;
+                    @:addpolyline(latitude, longitude, latitudeNext, longitudeNext, mymap)
+                }
+                }
+            </script>
+        </div>
+
+    </div>
+
+    <div class="col-md-2">
+
+        @if (Model.pathFound)
+        {
+            <h1>Trasa Lotnisk:</h1>
+            <ol>
+
+
+                @foreach (var airport in Model.airportsPath)
+                {
+
+                    <li>@airport.cityAndAirportName</li>
+
+                }
+            </ol>
+
+
+
+        }
+        else
+        {
+            <h1> nie znalazlem trasy</h1>
+        }
+
+
+
+    </div>
+    @if (Model.pathFound)
+    {
+        <h1>Trasa lotu</h1>
+        <ol>
+            @for (int i = 0; i < Model.routsWithEdges.Count; i++)
+            {
+                var route = Model.routsWithEdges[i].Route;
+                var airportArrival = route.airportArrival;
+                var airportDeparture = route.airportDeparture;
+
+                if (i + 1 < Model.routsWithEdges.Count)
+                {
+                    <h5>@airportDeparture.airportName departure at @route.timeDeparture.ToLocalTime().DateTime =>@airportArrival.airportName arrival at @route.timeArrival.ToLocalTime().DateTime</h5>
+                }
+                else
+                {
+                    <h5>@airportDeparture.airportName departure at @route.timeDeparture.ToLocalTime().DateTime => @airportArrival.airportName arrival at @route.timeArrival.ToLocalTime().DateTime </h5>
+                }
+            }
+        </ol>
+    }
+    <div>
+
+    </div>
+</div>
