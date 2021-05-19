@@ -20,6 +20,7 @@ namespace safe_routes.Controllers
 
         [BindProperty]
        public RouteDateViewModel routeDateViewModel { get; set; }
+        public int test { get; set; }
 
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationDbContext)
         {
