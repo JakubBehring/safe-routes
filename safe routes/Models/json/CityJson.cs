@@ -15,5 +15,12 @@ namespace safe_routes.Models.json
         public string? timezone { get; set; }
         public string? gmt { get; set; }
         public string? geoname_id { get; set; }
+
+        public bool conainsNulls()
+        {
+            return city_name == null || country_iso2 == null
+                         || gmt == null || iata_code == null || latitude == null
+                         || longitude == null || timezone == null;
+        }
     }
 }

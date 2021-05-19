@@ -20,9 +20,9 @@ namespace safe_routes.Models.json
         public string? estimated_runway { get; set; }
         public string? actual_runway { get; set; }
 
-        public static bool containsNulls(DepartureArrival departureArrival)
+        public  bool containsNulls()
         {
-            return departureArrival.airport == null || departureArrival.timezone == null || departureArrival.scheduled == null;
+            return airport == null || timezone == null || scheduled == null;
                 
         }
     }

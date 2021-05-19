@@ -16,8 +16,14 @@ namespace safe_routes.Models.json
         public AirlineJson airline { get; set; }
         public FlightJson flight { get; set; }
 
-        public Aircraft? aircraft { get; set; }
-        public LiveJson? live { get; set; }
+        public Aircraft aircraft { get; set; }
+        public LiveJson live { get; set; }
+
+        public bool containsNulls()
+        {
+            return flight_date == null || airline.name == null || flight.number == null
+                        || departure.containsNulls() || arrival.containsNulls();
+        }
 
     }
 }
