@@ -22,45 +22,31 @@ namespace safe_routes.Models.PathFinder
         public List<Airport> airports { get; set; } = new List<Airport>();
 
         public Dictionary<int, Airport> airportsDicionary { get; set; } = new Dictionary<int, Airport>();
-       
-        public void findRoutes()
+
+        public void FindRoutes()
         {
-            var airportsDict = new Dictionary<Airport, int>();
-            foreach (var item in applicationDbContext.Routes.Include(r => r.airportDeparture).Include(r => r.airportArrival))
-            {
-                if(airportsDict.ContainsKey(item.airportDeparture))
-                {
-                    airportsDict[item.airportDeparture] += 1;
-                }
-                else
-                {
-                    airportsDict.Add(item.airportDeparture, 1);
-                }
-            }
-            var airportsWithMostFlight = airportsDict.OrderBy(a => a.Value).Reverse().Take(50).ToDictionary(e => e.Key, e => e.Value);
-
-
+            var routes = applicationDbContext.Routes.Include(r => r.airportDeparture).ToList();
+            var mostPopularAirports = (from r in routes
+                                      group r by r.airportDeparture into a
+                                      select new { airport = a.Key, routesCount = a.Count() })
+                                      .OrderByDescending(a => a.routesCount)
+                                      .Take(50);
             DateTimeOffset dateTimeOffset = new DateTimeOffset(2019, 4, 17, 0, 0, 0,
                                           new TimeSpan(+2, 0, 0));
 
-            foreach (var airportDeparture in airportsWithMostFlight.Keys)
+            foreach (var airportDeparture in mostPopularAirports)
             {
-                foreach (var airportArrival in airportsWithMostFlight.Keys)
+                foreach (var airportArrival in mostPopularAirports)
                 {
                     if (airportDeparture == airportArrival)
                         continue;
 
-                    Routes = new List<Route>();
-                    airports = new List<Airport>();
-                    airportsDicionary = new Dictionary<int, Airport>();
-                    var pathinfo = FindPath(airportDeparture, airportArrival, dateTimeOffset, 8);
+                    var pathinfo = FindPath(airportDeparture.airport, airportArrival.airport, dateTimeOffset);
 
                     if (pathinfo.airportsPath.Count >= 3)
                     {
-                        File.AppendAllLines("C:\\Users\\jakub\\Desktop\\TrasyNajbardziejObleganeLotniska.txt", new List<string>() { airportDeparture.cityAndAirportName });
-                        File.AppendAllLines("C:\\Users\\jakub\\Desktop\\TrasyNajbardziejObleganeLotniska.txt", new List<string>() { airportArrival.cityAndAirportName });
-                        File.AppendAllLines("C:\\Users\\jakub\\Desktop\\TrasyNajbardziejObleganeLotniska.txt", new List<string>() { dateTimeOffset.ToString(), "\n" });
-
+                        File.AppendAllLines("C:\\Users\\jakub\\Desktop\\TrasyNajbardziejObleganeLotniska2.txt", new List<string>() { airportDeparture.airport.cityAndAirportName });
+                        File.AppendAllLines("C:\\Users\\jakub\\Desktop\\TrasyNajbardziejObleganeLotniska2.txt", new List<string>() { airportArrival.airport.cityAndAirportName, "\n"});
                     }
 
                 }
@@ -126,7 +112,7 @@ namespace safe_routes.Models.PathFinder
                   : routesFromAirport = routesFromAirport.Where(r => (r.timeDeparture - arrivalDateTime).TotalHours >= 1 && (r.timeDeparture - arrivalDateTime).TotalHours <= 4).ToList();
             Routes.AddRange(routesFromAirport);
 
-            
+
 
             if (!airports.Contains(airport))
                 airports.Add(airport);
@@ -151,7 +137,7 @@ namespace safe_routes.Models.PathFinder
                         airports.Add(route.airportArrival);
                 }
             }
-           
+
         }
 
         public void mapAirportsToDicionary(List<Airport> airports)

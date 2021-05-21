@@ -29,8 +29,8 @@ namespace safe_routes.Controllers
 
         public IActionResult Index()
         {
-          //  PathFinder pathFinder = new PathFinder(applicationDbContext);
-       //    pathFinder.findRoutes();
+         // PathFinder pathFinder = new PathFinder(applicationDbContext);
+         // pathFinder.FindRoutes();
             routeDateViewModel = new RouteDateViewModel() { airports = applicationDbContext.Airports};
             return View(routeDateViewModel);
         }
@@ -43,7 +43,7 @@ namespace safe_routes.Controllers
                 return NotFound();
             }
             PathFinder pathFinder = new PathFinder(applicationDbContext);
-          var pathInfo =  pathFinder.FindPath(airportDeparture, airportArrival, routeDateViewModel.DateTimeArrival,routeDateViewModel.maxNumberOfChanges);
+          var pathInfo =  pathFinder.FindPath(airportDeparture, airportArrival, routeDateViewModel.DateTimeArrival, routeDateViewModel.maxNumberOfChanges);
             return View(pathInfo);
         }
 

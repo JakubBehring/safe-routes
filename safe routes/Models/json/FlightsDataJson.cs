@@ -22,7 +22,7 @@ namespace safe_routes.Models.json
         public bool containsNulls()
         {
             return flight_date == null || airline.name == null || flight.number == null
-                        || departure.containsNulls() || arrival.containsNulls();
+                       || departure == null || arrival == null || departure.containsNulls() || arrival.containsNulls();
         }
 
     }

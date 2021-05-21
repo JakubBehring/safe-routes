@@ -33,20 +33,19 @@ namespace safe_routes.Controllers
         }
         public async Task<IActionResult> Airports()
         {
-            var airports = applicationDbContext.Airports.ToList();
+            var airports = applicationDbContext.Airports;
             return View(airports);
         }
 
         public async Task<IActionResult> Countries()
         {
-            var countries = applicationDbContext.Countries.ToList();
+            var countries = applicationDbContext.Countries;
             return View(countries);
         }
 
         public async Task<IActionResult> Routes()
         {
-            var routes = applicationDbContext.Routes.Include(r => r.airportArrival).Include(r => r.airportDeparture)
-                .Where(r => r.airportArrival != null && r.airportDeparture != null).ToList();
+            var routes = applicationDbContext.Routes.Include(r => r.airportArrival).Include(r => r.airportDeparture);
             return View(routes);
         }
         public async Task<IActionResult> GenereteCountriesCoronaInfo()
@@ -58,8 +57,8 @@ namespace safe_routes.Controllers
                 return NotFound();
 
             }
-            var countries = await response.Content.ReadFromJsonAsync<List<CountryJson>>();
 
+            var countries = await response.Content.ReadFromJsonAsync<List<CountryJson>>();
             foreach (var country in countries.Where(c => c.population > 0))
             {
                 Country countryToDb = new Country(country);
@@ -71,16 +70,13 @@ namespace safe_routes.Controllers
                 }
                 else
                     await applicationDbContext.AddAsync(countryToDb);
-
-
             }
-
             await applicationDbContext.SaveChangesAsync();
             return View();
         }
-       
 
-        
+
+
 
         public async Task<IActionResult> GenerateCities()
         {
@@ -94,8 +90,8 @@ namespace safe_routes.Controllers
                     return NotFound();
 
                 }
-                var cities = await response.Content.ReadFromJsonAsync<CitiesJson>();
 
+                var cities = await response.Content.ReadFromJsonAsync<CitiesJson>();
                 foreach (var city in cities.data)
                 {
 
@@ -105,7 +101,6 @@ namespace safe_routes.Controllers
                     {
                         City citytDb = new City(city);
                         var existInDb = applicationDbContext.Cities.Find(city.city_name);
-
 
                         if (existInDb != null)
                         {
@@ -135,7 +130,6 @@ namespace safe_routes.Controllers
                 }
 
                 var airports = await response.Content.ReadFromJsonAsync<AirportsJson>();
-
                 foreach (var airport in airports.data)
                 {
                     if (airport.conatinsNulls())
@@ -190,20 +184,21 @@ namespace safe_routes.Controllers
                 }
 
                 var flights = await response.Content.ReadFromJsonAsync<FlightsJson>();
-
                 foreach (var flight in flights.data)
                 {
                     if (flight.containsNulls())
                         continue;
 
-                   
-                        Route routeDb = new Route(flight);
-                        var airportArrival = applicationDbContext.Airports.FirstOrDefault(a => a.airportName == flight.arrival.airport);
-                        var airportDeparture = applicationDbContext.Airports.FirstOrDefault(a => a.airportName == flight.departure.airport);
-                        routeDb.airportArrival = airportArrival;
-                        routeDb.airportDeparture = airportDeparture;
-                        await applicationDbContext.AddAsync(routeDb);
-                        await applicationDbContext.SaveChangesAsync();
+
+                    Route routeDb = new Route(flight);
+                    var airportArrival = applicationDbContext.Airports.FirstOrDefault(a => a.airportName == flight.arrival.airport);
+                    var airportDeparture = applicationDbContext.Airports.FirstOrDefault(a => a.airportName == flight.departure.airport);
+                    if (airportDeparture == null && airportArrival == null)
+                        continue;
+                    routeDb.airportArrival = airportArrival;
+                    routeDb.airportDeparture = airportDeparture;
+                    await applicationDbContext.AddAsync(routeDb);
+                    await applicationDbContext.SaveChangesAsync();
                 }
 
             }
@@ -217,7 +212,7 @@ namespace safe_routes.Controllers
             return View();
         }
 
-        public async Task<IActionResult> clearAllRoutesWithoutAirport()
+        public async Task<IActionResult> ClearAllRoutesWithoutAirport()
         {
             var routes = await applicationDbContext.Routes.Include(r => r.airportDeparture).Include(r => r.airportArrival)
                 .Where(r => r.airportDeparture == null || r.airportArrival == null).ToListAsync();
@@ -225,14 +220,6 @@ namespace safe_routes.Controllers
             applicationDbContext.Routes.RemoveRange(routes);
             applicationDbContext.SaveChanges();
             return View();
-        }
-
-        public async Task<IActionResult> DistinctAllRoutes()
-        {
-            var routes = applicationDbContext.Routes.Include(r => r.airportDeparture).Include(r => r.airportArrival).ToList();
-            var routesDistinic = routes.Distinct().ToList();
-            return View();
-
         }
 
     }

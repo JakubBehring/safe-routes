@@ -54,6 +54,8 @@ namespace safe_routes.data
             terminalDeparture = flightDataJson.departure.terminal;
             timeArrival = DateTimeOffset.Parse(flightDataJson.arrival.scheduled);
             timeDeparture = DateTimeOffset.Parse(flightDataJson.departure.scheduled);
+
+            
         }
     }
 
