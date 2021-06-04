@@ -19,7 +19,7 @@ namespace safe_routes.Controllers
         private readonly ApplicationDbContext applicationDbContext;
 
         [BindProperty]
-       public RouteDateViewModel routeDateViewModel { get; set; }
+        public RouteDateViewModel routeDateViewModel { get; set; }
 
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationDbContext)
         {
@@ -29,21 +29,38 @@ namespace safe_routes.Controllers
 
         public IActionResult Index()
         {
-         // PathFinder pathFinder = new PathFinder(applicationDbContext);
-         // pathFinder.FindRoutes();
-            routeDateViewModel = new RouteDateViewModel() { airports = applicationDbContext.Airports};
+            // PathFinder pathFinder = new PathFinder(applicationDbContext);
+            // pathFinder.FindRoutes();
+            if(routeDateViewModel == null)
+            { 
+                 routeDateViewModel = new RouteDateViewModel() { airports = applicationDbContext.Airports, DateTimeArrival = DateTimeOffset.Now, maxNumberOfChanges = 3};
+            }
+            else
+            {
+                var airportDeparture = applicationDbContext.Airports.Where(a => a.cityAndAirportName == routeDateViewModel.airportDeparture).FirstOrDefault();
+                var airportArrival = applicationDbContext.Airports.Where(a => a.cityAndAirportName == routeDateViewModel.airportArrival).FirstOrDefault();
+                if (airportArrival == null || airportDeparture == null)
+                {
+                    return NotFound();
+                }
+                PathFinder pathFinder = new PathFinder(applicationDbContext);
+                var pathInfo = pathFinder.FindPath(airportDeparture, airportArrival, routeDateViewModel.DateTimeArrival, routeDateViewModel.maxNumberOfChanges);
+                routeDateViewModel.PathInfo = pathInfo;
+                routeDateViewModel.airports = applicationDbContext.Airports;
+            }
+           
             return View(routeDateViewModel);
         }
         public IActionResult PathFound()
         {
             var airportDeparture = applicationDbContext.Airports.Where(a => a.cityAndAirportName == routeDateViewModel.airportDeparture).FirstOrDefault();
             var airportArrival = applicationDbContext.Airports.Where(a => a.cityAndAirportName == routeDateViewModel.airportArrival).FirstOrDefault();
-            if(airportArrival == null || airportDeparture == null)
+            if (airportArrival == null || airportDeparture == null)
             {
                 return NotFound();
             }
             PathFinder pathFinder = new PathFinder(applicationDbContext);
-          var pathInfo =  pathFinder.FindPath(airportDeparture, airportArrival, routeDateViewModel.DateTimeArrival, routeDateViewModel.maxNumberOfChanges);
+            var pathInfo = pathFinder.FindPath(airportDeparture, airportArrival, routeDateViewModel.DateTimeArrival, routeDateViewModel.maxNumberOfChanges);
             return View(pathInfo);
         }
 

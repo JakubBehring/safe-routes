@@ -12,6 +12,6 @@ namespace safe_routes.Models.PathFinder
         public int routesCount { get; set; }
         public bool pathFound { get; set; }
         public List<Airport> airportsPath { get; set; }
-        public List<RouteAndEdge> routsWithEdges;
+        public List<RouteInfo> routsWithEdges;
     }
 }

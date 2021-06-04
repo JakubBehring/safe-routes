@@ -1,19 +1,89 @@
-﻿@using safe_routes.ViewModels.Home
+﻿@using safe_routes.ViewModels.Home;
 @model RouteDateViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
 
-<div>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
 
-    <div class="container">
-        <form method="post">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script src='//unpkg.com/leaflet-arc/bin/leaflet-arc.min.js'></script>
+</head>
 
-            <div class="col-md-9">
-                <div class="row">
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+
+
+<div class="container">
+    <div class="row" style="background-color: #e2e8f0;">
+
+        <div class="col-md-10">
+            <div id="mapid" style="height: 800px; margin: 25px 10px 25px 10px;">
+
+                <script type="text/javascript">
+                var mymap = L.map('mapid').setView([51.505, -0.09], 2);
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamFrdWJiZWhyaW5nIiwiYSI6ImNrb2dmMnR2bDB2ZzEyb3IwOW84c3VoaG4ifQ.iZFbkeKqe0Fdd0beyzdfAg', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                }).addTo(mymap);
+
+
+                function addMarker(latitude, longitude, index, map) {
+                    var marker = L.marker([latitude, longitude]).bindTooltip(index.toString(),
+                        {
+                            permanent: true,
+                            direction: 'right'
+                        }).addTo(map);
+                }
+                function addpolyline(latitudeStart, longitudeStart, latitudeEnd, longitudeEnd, map) {
+
+                     // firstpolyline.addTo(map);
+                    L.Polyline.Arc([latitudeStart, longitudeStart], [latitudeEnd, longitudeEnd], {
+                        color: 'green',
+                        vertices: 200
+                    }).addTo(map);
+                  //  L.addpolyline.arc(pointA, pointB)
+                }
+               @if (Model.PathInfo?.pathFound ?? false)
+               {
+                      @for (int i = 1; i <= Model.PathInfo.airportsPath.Count; i++)
+                      {
+                          var airport = Model.PathInfo.airportsPath[i - 1];
+                       @:latitude = @airport.latiude;
+                       @:longitude = @airport.longitude;
+                       @:index = @i;
+                       @:addMarker(latitude, longitude, index, mymap);
+
+                          if (i + 1 <= Model.PathInfo.airportsPath.Count)
+                          {
+                              var nextAirport = Model.PathInfo.airportsPath[i];
+                             @:latitudeNext = @nextAirport.latiude;
+                       @:longitudeNext = @nextAirport.longitude;
+                       @:addpolyline(latitude, longitude, latitudeNext, longitudeNext, mymap)
+                   }
+                      }
+               }
+                </script>
+            </div>
+
+        </div>
+
+        <div class="col-md-2" style="margin:200px 0px 0px 0px;">
+
+            <form method="post">
+
+
+                <div>
+                    <div>
                         <label>ariport departure</label>
-                        <input  class="form-control" asp-for="@Model.airportDeparture" list="airportsArrival">
+                        <input class="form-control" asp-for="@Model.airportDeparture" list="airportsDeparture" value="@Model.airportDeparture">
                         <datalist id="airportsDeparture">
                             @foreach (var airport in Model.airports)
                             {
@@ -22,10 +92,10 @@
                         </datalist>
                     </div>
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div>
                         <label>ariport arrival</label>
-                        <input class="form-control" asp-for="@Model.airportArrival" list="airportsDeparture">
-                        <datalist id="airportArrival">
+                        <input class="form-control" asp-for="@Model.airportArrival" list="airportsArrival" value="@Model.airportArrival">
+                        <datalist id="airportsArrival">
                             @foreach (var airport in Model.airports)
                             {
                                 <option>@airport.cityAndAirportName</option>
@@ -35,22 +105,70 @@
 
 
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div>
                         <label>Date</label>
-                        <input  class="form-control" type="datetime-local"  value="@DateTime.Now" asp-for="@Model.DateTimeArrival">
+                        <input class="form-control" type="datetime-local" asp-for="@Model.DateTimeArrival" value="@Model.DateTimeArrival.DateTime.ToString("s")">
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div>
                         <label>Max number of changes (max 3)</label>
-                        <input class="form-control" type="number" min="0" max="3"  asp-for="@Model.maxNumberOfChanges" value="3" list="maxNumberOfChanges">
-                        
+                        <input class="form-control" type="number" min="0" max="3" asp-for="@Model.maxNumberOfChanges" value="@Model.maxNumberOfChanges" list="maxNumberOfChanges">
+
                     </div>
 
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
-                        <button type="submit" asp-action="PathFound">search </button>
+                    <div>
+                        <button type="submit" asp-action="Index">search </button>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+
+        </div>
+
     </div>
 </div>
+
+@if (Model.PathInfo?.pathFound ?? false)
+{
+
+
+    <div class="container" style="        background-color: #9CA3AF;">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="text-center">
+                    <h2>Best path from @Model.airportDeparture to @Model.airportArrival</h2>
+                </div>
+                <div class="row">
+                    @if (Model.PathInfo?.pathFound ?? false)
+                    { int i = 1;
+                    @foreach (var routeInfo in Model.PathInfo.routsWithEdges)
+                    {
+                        var route = routeInfo.Route;
+                        var airportArrival = route.airportArrival;
+                        var airportDeparture = route.airportDeparture;
+                        <div class="col-sm">
+                            <div class="power_full">
+                                <h2 class="powerful_text">@i) @airportDeparture.cityAndAirportName - @airportArrival.cityAndAirportName</h2>
+                                <p class="making_text"> @route.timeDeparture.ToLocalTime().DateTime -  @route.timeArrival.ToLocalTime().DateTime</p>
+                                <p class="making_text"> flight time: @routeInfo.FlightTime</p>
+
+
+                            </div>
+
+                        </div>
+                        i++;
+                    }
+                }
+                else
+                {
+                        <div class="text-center">
+                            <h1>Nie znaleziono trasy</h1>
+                        </div>
+                }
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+

@@ -1,4 +1,5 @@
 ﻿using safe_routes.data;
+using safe_routes.Models.PathFinder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace safe_routes.ViewModels.Home
 {
     public class RouteDateViewModel
     {
+        // data to get input
         public string airportArrival { get; set; }
 
         public string airportDeparture { get; set; }
@@ -17,5 +19,10 @@ namespace safe_routes.ViewModels.Home
         public int maxNumberOfChanges { get; set; }
 
         public IEnumerable<Airport> airports { get; set; }
+
+        // data to show path found 
+
+       public PathInfo PathInfo { get; set; }
+
     }
 }

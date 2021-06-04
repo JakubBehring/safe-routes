@@ -60,13 +60,13 @@ namespace safe_routes.Models.PathFinder
             findAllRoutesFromAirport(airportDeparture, 1, arrivalDateTime, maxChange);
             mapAirportsToDicionary(airports);
             var airpotCount = airports.Count;
-            RouteAndEdge[,] graph = new RouteAndEdge[airpotCount, airpotCount];
+            RouteInfo[,] graph = new RouteInfo[airpotCount, airpotCount];
             fillInGraph(graph);
             var vortexStart = airportsDicionary.Where(a => a.Value == airportDeparture).FirstOrDefault().Key;
             var vortexEnd = airportsDicionary.Where(a => a.Value == airportArrival).FirstOrDefault().Key;
             var pathFound = false;
             List<Airport> airpotsPath = new List<Airport>();
-            List<RouteAndEdge> routesInGraph = new List<RouteAndEdge>();
+            List<RouteInfo> routesInGraph = new List<RouteInfo>();
             if (vortexEnd == 0)
             {
                 // nie znaziono trasy
@@ -148,7 +148,7 @@ namespace safe_routes.Models.PathFinder
             }
         }
 
-        public void fillInGraph(RouteAndEdge[,] graph)
+        public void fillInGraph(RouteInfo[,] graph)
         {
             Routes = Routes.Distinct().ToList();
             var countriesEpidemicState = applicationDbContext.Countries;
@@ -173,8 +173,9 @@ namespace safe_routes.Models.PathFinder
                 // wpisać krawedz 
 
                 var route2 = new { route2 = route, edge = distance + (distance * casesPerPopulation) };
+                var flightTime = (route.timeArrival - route.timeDeparture);
 
-                graph[indexDeparture, indexArrival] = new RouteAndEdge() { Route = route, Edge = distance + (distance * casesPerPopulation) };
+                graph[indexDeparture, indexArrival] = new RouteInfo(route, distance, flightTime, edge: distance + (distance * casesPerPopulation));
 
             }
         }
@@ -183,10 +184,28 @@ namespace safe_routes.Models.PathFinder
 
     }
 
-    public record RouteAndEdge
+    public record RouteInfo
     {
         public Route Route { get; set; }
+        public double Distance { get; set; }
+        public TimeSpan FlightTime { get; set; }
+        public int population { get; set; }
+        public int Cases { get; set; }
+        public int activeCases { get; set; }
         public double Edge { get; set; }
+        
+       
+
+        public RouteInfo(Route route, double distance, TimeSpan flightTime, double edge)
+        {
+            this.Route = route;
+            this.Distance = distance;
+            this.FlightTime = flightTime;
+            this.Edge = edge;
+           
+          
+
+        }
     }
 
 

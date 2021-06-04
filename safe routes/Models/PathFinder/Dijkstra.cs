@@ -9,7 +9,7 @@ namespace safe_routes.Models.PathFinder
     {
         private readonly int noParent = -1;
         private List<int> shortestPath = new List<int>();
-        public List<int> dijkstra(RouteAndEdge[,] adjacencyMatrix,
+        public List<int> dijkstra(RouteInfo[,] adjacencyMatrix,
                                             int startVertex, int endVertex)
         {
             int nVertices = adjacencyMatrix.GetLength(0);
