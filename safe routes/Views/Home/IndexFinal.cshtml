@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="d-flex flex-wrap h-100">
+    <div class="container align-self-end">
+        <form class="d-flex flex-column _myForm" method="post">
+
+            <div class="row order-md-0">
+                <div class="d-none d-md-block col-md-2 "></div>
+                <div class="col-12 col-md-3 p-0">
+                    <label>Miejsce odlotu</label>
+                    <input class="form-control" list="airportsArrival" placeholder="Skąd">
+                    <datalist id="airportsDeparture">
+                        <option>airport.cityAndAirportName</option>
+                    </datalist>
+                </div>
+                <div class="d-none d-md-block col-md-2"></div>
+                <div class="col-12 col-md-3 p-0">
+                    <label>Cel</label>
+                    <input class="form-control " list="airportsDeparture" placeholder="Dokąd">
+                    <datalist id="airportArrival">
+                        <option>airport.cityAndAirportName</option>
+                    </datalist>
+                </div>
+                <div class="d-none d-md-block col-md-2 "></div>
+            </div>
+
+            <div class="row order-1 order-md-2">
+                <div class="d-none d-md-block col-md-2"></div>
+                <div class="col-12 col-md-3 p-0">
+                    <label>Kiedy</label>
+                    <input class="form-control" type="datetime-local" value="@DateTime.Now">
+                </div>
+                <div class="d-none d-md-block col-md-2"></div>
+                <div class="col-12 col-md-3 p-0">
+                    <label>Maks. liczba przesiadek (maks. 3)</label>
+                    <input class="form-control" type="number" min="0" max="3" value="3" list="maxNumberOfChanges">
+                </div>
+                <div class="d-none d-md-block col-md-2"></div>
+            </div>
+
+            <div class="row mt-4 mt-md-0 order-2 order-md-1">
+                <div class="col-4"></div>
+                <div class="col-4 d-flex justify-content-center">
+                    <div>
+
+                        <button type="submit" asp-action="PathFound2" class="_mySearchBtn">
+
+                            <span class="_mySearchBtn__plane icon-flight"></span>
+                            <span class="_mySearchBtn__cloud icon-cloud"></span>
+
+                            <p class="_mySearchBtn__value">Szukaj</p>
+                        </button>
+
+                    </div>
+                </div>
+                <div class="col-4 "></div>
+            </div>
+        </form>
+    </div>
+</div>

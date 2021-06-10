@@ -4842,11 +4842,12 @@
       ]
     },
     "System.ComponentModel/4.3.0": {
-      "sha512": "8uGiZRRfXhM0vwAMEZSQmT4kUnbr1Y0bwkd8t0+S2BVrf50KDp0DcRohKotCdz26DDD6mTUvAPRjChKjJCAP4A==",
+      "sha512": "VyGn1jGRZVfxnh8EdvDCi71v3bMXrsu8aYJOwoV7SNDLVhiEqwP86pPMyRGsDsxhXAm2b3o9OIqeETfN5qfezw==",
       "type": "package",
       "path": "system.componentmodel/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -6208,11 +6209,12 @@
       ]
     },
     "System.Net.NameResolution/4.3.0": {
-      "sha512": "1tC/8YCT0xsqMQ/ZcS0EqtUbZnjoOJrdz2Ohhrx67ermCHDteSga2EMO5W+bO5i3K+w1vizcrmYiHfRGqrlQ+g==",
+      "sha512": "AFYl08R7MrsrEjqpQWTZWBadqXyTzNDaWpMqyxhb0d6sGhV6xMDKueuBXlLL30gz+DIRY6MpdgnHWlCh5wmq9w==",
       "type": "package",
       "path": "system.net.nameresolution/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -8830,30 +8832,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jakub\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\y3t1m\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\safe routes\\safe routes\\safe routes.csproj",
+      "projectUniqueName": "C:\\Users\\y3t1m\\Desktop\\pg\\_sem6\\wasg\\projekt_jb\\safe-routes\\safe routes\\safe routes.csproj",
       "projectName": "safe routes",
-      "projectPath": "G:\\safe routes\\safe routes\\safe routes.csproj",
-      "packagesPath": "C:\\Users\\jakub\\.nuget\\packages\\",
-      "outputPath": "G:\\safe routes\\safe routes\\obj\\",
+      "projectPath": "C:\\Users\\y3t1m\\Desktop\\pg\\_sem6\\wasg\\projekt_jb\\safe-routes\\safe routes\\safe routes.csproj",
+      "packagesPath": "C:\\Users\\y3t1m\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\y3t1m\\Desktop\\pg\\_sem6\\wasg\\projekt_jb\\safe-routes\\safe routes\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\jakub\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\y3t1m\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"

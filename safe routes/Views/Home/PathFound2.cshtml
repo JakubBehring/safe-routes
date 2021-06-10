@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewData["Title"] = "Path";
+}
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script src='//unpkg.com/leaflet-arc/bin/leaflet-arc.min.js'></script>
+</head>
+
+<div>
+    <div class="row">
+        <h2 class="w-100 text-center text-md-left my-3 text-white _myHeading">Znaleziono trasę</h2>
+    </div>
+
+    <div class="row justify-content-center flex-md-row justify-content-md-start">
+        <div class="col-md-10 col-11 p-0">
+            <div class="mr-0 mr-md-3 _myMap" id="mapid" style="height:450px;">
+
+                <script type="text/javascript">
+                var mymap = L.map('mapid').setView([51.505, -0.09], 2);
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamFrdWJiZWhyaW5nIiwiYSI6ImNrb2dmMnR2bDB2ZzEyb3IwOW84c3VoaG4ifQ.iZFbkeKqe0Fdd0beyzdfAg', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'your.mapbox.access.token'
+                }).addTo(mymap);
+
+
+                function addMarker(latitude, longitude, index, map) {
+                    var marker = L.marker([latitude, longitude]).bindTooltip(index.toString(),
+                        {
+                            permanent: true,
+                            direction: 'right'
+                        }).addTo(map);
+                }
+                function addpolyline(latitudeStart, longitudeStart, latitudeEnd, longitudeEnd, map) {
+                    var pointA = new L.LatLng(latitudeStart, longitudeStart);
+                    var pointB = new L.LatLng(latitudeEnd, longitudeEnd);
+                    var pointList = [pointA, pointB];
+
+                    var firstpolyline = new L.Polyline(pointList, {
+                        color: 'red',
+                        weight: 3,
+                        opacity: 0,
+                        smoothFactor: 1
+                    });
+                      firstpolyline.addTo(map);
+                    L.Polyline.Arc([latitudeStart, longitudeStart], [latitudeEnd, longitudeEnd], {
+                        color: '#4776E6',
+                        weight: 2,
+                        dashArray: '5, 5',
+
+                        vertices: 200
+                    }).addTo(map);
+                  //  L.addpolyline.arc(pointA, pointB)
+                }
+
+                @for (int i =1; i <= 3; i++)
+                {
+
+                    @:latitude = @i*25;
+                    @:longitude = @i*25+15;
+                    @:index = @i;
+                    @:addMarker(latitude, longitude, index, mymap);
+
+                    if(i+1 <= 3)
+                {
+
+                          @:latitudeNext = @i*35;
+                    @:longitudeNext = @i*35+15;
+                    @:addpolyline(latitude, longitude, latitudeNext, longitudeNext, mymap)
+                }
+                }
+                </script>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap text-center card col-md-2 col-11 align-self-center p-2 pt-4 mt-5 mt-md-0 ">
+            <span class="icon-info _myIconInfo _myInfoIcon"></span>
+            <p class="align-self-center text-white p-2 mt-3 mb-2 _myInfo">6432539</p>
+            <p class="w-100">sprawdzonych lotnisk</p>
+            <p class="align-self-center text-white p-2 mb-2 _myInfo">63575539</p>
+            <p class="pb-0 mb-1 w-100">sprawdzonych lotów</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <h3 class="mt-3 mb-3 text-white w-100 text-center text-md-left _myHeading">Trasa lotu</h3>
+        <ol class="d-flex flex-wrap justify-content-center flex-md-row justify-content-md-start p-0 mb-0 _myRouteList">
+
+            <li class="card p-2 mr-3 mb-3 text-center _myRouteList__item">
+                <p class="mb-1">airportDeparture.airportName</p>
+                <p class="mb-1"><span class="icon-right"></span></p>
+                <p class="mb-2 pb-3 border-bottom">airportArrival.airportName</p>
+
+                <p class="mb-1">departure at route.timeDeparture.ToLocalTime().DateTime</p>
+                <p class="mb-1"><span class="icon-right"></span></p>
+                <p class="mb-1">arrival at route.timeArrival.ToLocalTime().DateTime</p>
+            </li>
+
+            <li class="card p-2 mr-3 mb-3 text-center _myRouteList__item">
+                <p class="mb-1">airportDeparture.airportName</p>
+                <p class="mb-1"><span class="icon-right"></span></p>
+                <p class="mb-2 pb-3 border-bottom">airportArrival.airportName</p>
+
+                <p class="mb-1">departure at route.timeDeparture.ToLocalTime().DateTime</p>
+                <p class="mb-1"><span class="icon-right"></span></p>
+                <p class="mb-1">arrival at route.timeArrival.ToLocalTime().DateTime</p>
+            </li>
+
+            <li class="card p-2 mr-3 mb-3 text-center _myRouteList__item">
+                <p class="mb-1">airportDeparture.airportName</p>
+                <p class="mb-1"><span class="icon-right"></span></p>
+                <p class="mb-2 pb-3 border-bottom">airportArrival.airportName</p>
+
+                <p class="mb-1">departure at route.timeDeparture.ToLocalTime().DateTime</p>
+                <p class="mb-1"><span class="icon-right"></span></p>
+                <p class="mb-1">arrival at route.timeArrival.ToLocalTime().DateTime</p>
+            </li>
+
+          
+
+        </ol>
+    </div>
+
+    <div class="row d-flex flex-column">
+
+        <div class="col-9 col-md-12 align-self-center align-self-md-start p-0">
+            <h3 class="mb-3 text-white w-100 text-center text-md-left _myHeading">Trasa Lotnisk</h3>
+            <ol class="d-flex flex-wrap p-0 mb-0  _myAirportList">
+
+                <li class="card p-2 mr-3 mb-3 _myAirportList__item">airport.cityAndAirportName</li>
+                <li class="card p-2 mr-3 mb-3 _myAirportList__item">airport.cityAndAirportName</li>
+                <li class="card p-2 mr-3 mb-3 _myAirportList__item">airport.cityAndAirportName</li>
+                <li class="card p-2 mr-3 mb-3 _myAirportList__item">airport.cityAndAirportName</li>
+
+            </ol>
+        </div>
+    </div>
+    <div class="row mt-3 justify-content-center flex-md-row justify-content-md-start">
+        <a class="btn btn-success _myTryAgainBtn" asp-controller="Home" asp-action="Index"><span class="icon-level-up"></span>Szukaj ponownie</a>
+    </div>
+</div>

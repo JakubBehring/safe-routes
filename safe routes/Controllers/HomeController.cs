@@ -40,12 +40,23 @@ namespace safe_routes.Controllers
             var airportArrival = applicationDbContext.Airports.Where(a => a.cityAndAirportName == routeDateViewModel.airportArrival).FirstOrDefault();
             if(airportArrival == null || airportDeparture == null)
             {
-                return NotFound();
+                return NotFound(); //nowy view NoRoute()
             }
             PathFinder pathFinder = new PathFinder(applicationDbContext);
           var pathInfo =  pathFinder.FindPath(airportDeparture, airportArrival, routeDateViewModel.DateTimeArrival,routeDateViewModel.maxNumberOfChanges);
             return View(pathInfo);
         }
+
+        public IActionResult PathFound2()
+        {
+            return View();
+        }
+
+        public IActionResult NoRoute()
+        {
+            return View();
+        }
+
 
         public IActionResult Privacy()
         {
