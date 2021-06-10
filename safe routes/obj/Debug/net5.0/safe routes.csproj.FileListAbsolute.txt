@@ -311,3 +311,5 @@ C:\Users\y3t1m\Desktop\pg\_sem6\wasg\projekt_jb\safe-routes\safe routes\obj\Debu
 C:\Users\y3t1m\Desktop\pg\_sem6\wasg\projekt_jb\safe-routes\safe routes\obj\Debug\net5.0\safe routes.genruntimeconfig.cache
 C:\Users\y3t1m\Desktop\pg\_sem6\wasg\projekt_jb\safe-routes\safe routes\obj\Debug\net5.0\Razor\Views\Home\PathFound2.cshtml.g.cs
 C:\Users\y3t1m\Desktop\pg\_sem6\wasg\projekt_jb\safe-routes\safe routes\obj\Debug\net5.0\Razor\Views\Home\NoRoute.cshtml.g.cs
+C:\Users\y3t1m\Desktop\pg\_sem6\wasg\projekt_jb\safe-routes\safe routes\obj\Debug\net5.0\Razor\Views\Home\IndexFinal.cshtml.g.cs
+C:\Users\y3t1m\Desktop\pg\_sem6\wasg\projekt_jb\safe-routes\safe routes\obj\Debug\net5.0\Razor\Views\Home\PathFound.cshtml.g.cs

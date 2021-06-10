@@ -1,4 +1,5 @@
-﻿
+﻿@using safe_routes.ViewModels.Home;
+@model RouteDateViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -11,17 +12,23 @@
                 <div class="d-none d-md-block col-md-2 "></div>
                 <div class="col-12 col-md-3 p-0">
                     <label>Miejsce odlotu</label>
-                    <input class="form-control" list="airportsArrival" placeholder="Skąd">
+                    <input class="form-control" list="airportsArrival" asp-for="@Model.airportDeparture placeholder="Skąd">
                     <datalist id="airportsDeparture">
-                        <option>airport.cityAndAirportName</option>
+                        @foreach (var airport in Model.airports)
+                        {
+                            <option>@airport.cityAndAirportName</option>
+                        }
                     </datalist>
                 </div>
                 <div class="d-none d-md-block col-md-2"></div>
                 <div class="col-12 col-md-3 p-0">
                     <label>Cel</label>
-                    <input class="form-control " list="airportsDeparture" placeholder="Dokąd">
+                    <input class="form-control" list="airportsDeparture" asp-for="@Model.airportArrival" placeholder=" Dokąd">
                     <datalist id="airportArrival">
-                        <option>airport.cityAndAirportName</option>
+                        @foreach (var airport in Model.airports)
+                        {
+                            <option>@airport.cityAndAirportName</option>
+                        }
                     </datalist>
                 </div>
                 <div class="d-none d-md-block col-md-2 "></div>
@@ -31,12 +38,12 @@
                 <div class="d-none d-md-block col-md-2"></div>
                 <div class="col-12 col-md-3 p-0">
                     <label>Kiedy</label>
-                    <input class="form-control" type="datetime-local" value="@DateTime.Now">
+                    <input class="form-control" type="datetime-local" value="@DateTime.Now" asp-for="@Model.DateTimeArrival">
                 </div>
                 <div class="d-none d-md-block col-md-2"></div>
                 <div class="col-12 col-md-3 p-0">
                     <label>Maks. liczba przesiadek (maks. 3)</label>
-                    <input class="form-control" type="number" min="0" max="3" value="3" list="maxNumberOfChanges">
+                    <input class="form-control" type="number" min="0" max="3" value="3" asp-for="@Model.maxNumberOfChanges" list="maxNumberOfChanges">
                 </div>
                 <div class="d-none d-md-block col-md-2"></div>
             </div>
@@ -46,7 +53,7 @@
                 <div class="col-4 d-flex justify-content-center">
                     <div>
 
-                        <button type="submit" asp-action="PathFound2" class="_mySearchBtn">
+                        <button type="submit" asp-action="PathFound" class="_mySearchBtn">
 
                             <span class="_mySearchBtn__plane icon-flight"></span>
                             <span class="_mySearchBtn__cloud icon-cloud"></span>
